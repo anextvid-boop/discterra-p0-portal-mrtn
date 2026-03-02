@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proposal Snapshot Listing | DiscTerra</title>
+    <meta name="description" content="Martin Wirtschafter · Proposal Snapshot Listing. Confidential." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Lato:wght@300;400;700;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ============================================================
+       DESIGN TOKENS — DISCTERRA BRAND SYSTEM
+    ============================================================ */
+        :root {
+            /* ── Discterra exact brand palette ── */
+            --teal: #1B7575;
+            /* accent — pulled from site config */
+            --teal-dark: #155e5e;
+            /* darker teal for hover */
+            --teal-light: #e8f4f4;
+            /* teal tint for bg uses */
+            --navy-overlay: rgba(4, 5, 23, 0.72);
+            /* cinematic hero overlay */
+            --black: #111111;
+            --near-black: #1A1A1A;
+            --dark-gray: #555555;
+            --mid-gray: #888888;
+            --light-gray: #E2E2E2;
+            --off-white: #F5F5F5;
+            --white: #FFFFFF;
+            --star-active: #1B7575;
+            /* teal stars — on-brand */
+            --star-hover: #27a0a0;
+
+            --font-display: 'Lora', Georgia, serif;
+            --font-body: 'Lato', -apple-system, sans-serif;
+
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 24px rgba(0, 0, 0, 0.07);
+            --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.10), 0 12px 40px rgba(0, 0, 0, 0.09);
+            --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--off-white);
+            color: var(--near-black);
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============================================================
+       NAV BAR
+    ============================================================ */
+        .topnav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(4, 5, 23, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 56px;
+            border-bottom: 1px solid rgba(27, 117, 117, 0.25);
+        }
+
+        .topnav-brand {
+            font-family: var(--font-body);
+            font-weight: 900;
+            font-size: 11px;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: var(--white);
+        }
+
+        .topnav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            background: transparent;
+            color: rgba(255, 255, 255, 0.55);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .nav-btn:hover {
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-btn.active {
+            background: var(--teal);
+            color: var(--white);
+            border-color: var(--teal);
+        }
+
+        .nav-btn .star-icon {
+            color: var(--teal);
+            font-size: 13px;
+        }
+
+        .starred-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--teal);
+            color: var(--white);
+            font-size: 9px;
+            font-weight: 900;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            line-height: 1;
+        }
+
+        /* ============================================================
+       HERO / COVER
+    ============================================================ */
+        .cover {
+            background: #040517 url('img_offloader_1.png');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 120px 48px 100px;
+            /* Increased padding */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Always-on dark overlay so text is legible over any background image */
+        .cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 5, 23, 0.65);
+            z-index: 0;
+        }
+
+        /* All text content sits above the overlay */
+        .cover-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Cinematic gradient — matches Discterra's image-overlay hero */
+        .cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(27, 117, 117, 0.18) 0%, transparent 60%),
+                linear-gradient(160deg, rgba(4, 5, 23, 0.0) 0%, rgba(27, 117, 117, 0.06) 100%);
+            pointer-events: none;
+        }
+
+        /* Teal accent line at very top — matches Discterra's site chrome */
+        .cover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--teal);
+        }
+
+        .cover-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.38);
+            margin-bottom: 20px;
+        }
+
+        .cover-title {
+            font-family: var(--font-display);
+            font-size: clamp(40px, 5.5vw, 72px);
+            font-weight: 700;
+            line-height: 1.12;
+            color: var(--white);
+            margin-bottom: 24px;
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-title .title-line1 {
+            display: block;
+            color: var(--white);
+            font-style: normal;
+        }
+
+        .cover-title .title-line2 {
+            display: block;
+            color: var(--teal);
+            font-style: italic;
+            letter-spacing: 0.01em;
+        }
+
+        .cover-rule {
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.18);
+            margin: 20px auto;
+        }
+
+        .cover-sub {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.48);
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        /* Speed-read list in hero */
+        .cover-speed-read {
+            max-width: 660px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        /* Stacked impact lines in hero */
+        .csr-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .csr-line {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(15px, 1.6vw, 20px);
+            line-height: 1.55;
+            letter-spacing: -0.01em;
+        }
+
+        .csr-line.dim {
+            color: rgba(255, 255, 255, 0.42);
+            font-weight: 400;
+        }
+
+        .csr-line.bright {
+            color: rgba(255, 255, 255, 0.88);
+            font-weight: 600;
+        }
+
+        .csr-line.accent {
+            color: var(--teal);
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .csr-line.gap {
+            height: 14px;
+        }
+
+        /* ============================================================
+       FILTER / LEGEND BAR
+    ============================================================ */
+        .toolbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--light-gray);
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 56px;
+            z-index: 90;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-right: 6px;
+        }
+
+        .filter-btn {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 3px;
+            border: 1px solid var(--light-gray);
+            background: var(--white);
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--black);
+            color: var(--black);
+        }
+
+        .filter-btn.active {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .filter-btn.starred-filter {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .filter-btn.starred-filter.active {
+            background: var(--teal);
+            color: var(--white);
+            border-color: var(--teal);
+        }
+
+        .toolbar-right {
+            font-size: 11px;
+            color: var(--mid-gray);
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        /* ============================================================
+       EMPTY STATE (starred view with no stars)
+    ============================================================ */
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 100px 40px;
+        }
+
+        .empty-state.visible {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--near-black);
+            margin-bottom: 10px;
+        }
+
+        .empty-sub {
+            font-size: 14px;
+            color: var(--mid-gray);
+        }
+
+        /* ============================================================
+       GRID
+    ============================================================ */
+        .grid-wrapper {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 48px 36px 80px;
+        }
+
+        .proposals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(355px, 1fr));
+            gap: 20px;
+        }
+
+        /* ============================================================
+       CARD
+    ============================================================ */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+            border-color: #ccc;
+        }
+
+        .card.is-starred {
+            border-color: var(--teal);
+            box-shadow: var(--shadow-card), 0 0 0 1px var(--teal);
+        }
+
+        .card.is-starred:hover {
+            box-shadow: var(--shadow-hover), 0 0 0 1px var(--teal);
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        /* Top accent line — teal for top priority, fades for lower tiers */
+        .card-accent {
+            height: 3px;
+            width: 100%;
+        }
+
+        .prio-a .card-accent {
+            background: var(--teal);
+        }
+
+        .prio-b .card-accent {
+            background: #8ab8b8;
+        }
+
+        .prio-c .card-accent {
+            background: var(--light-gray);
+        }
+
+        /* ---- Favoured highlight ---- */
+        .card-favored {
+            background: linear-gradient(160deg,
+                    rgba(212, 175, 55, 0.14) 0%,
+                    rgba(212, 175, 55, 0.06) 60%,
+                    rgba(180, 140, 20, 0.04) 100%);
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow:
+                0 0 0 1px rgba(212, 175, 55, 0.3),
+                0 8px 40px rgba(212, 175, 55, 0.18),
+                inset 0 1px 0 rgba(255, 220, 80, 0.12);
+        }
+
+        .card-favored .card-accent {
+            background: linear-gradient(90deg, #b8860b, #d4af37, #f5d66e, #d4af37);
+            height: 4px;
+        }
+
+        .card-favored .card-num {
+            color: #d4af37;
+        }
+
+        .card-favored .card-title {
+            color: #0a0a0a;
+            font-size: 22px;
+        }
+
+        .favored-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            font-family: var(--font-body);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 4px;
+            padding: 3px 8px;
+            z-index: 2;
+        }
+
+        /* ---- Star button ---- */
+        .star-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--light-gray);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 2;
+            font-size: 15px;
+            color: #ccc;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .star-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            transform: scale(1.12);
+        }
+
+        .star-btn.starred {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: var(--white);
+            box-shadow: 0 2px 10px rgba(27, 117, 117, 0.4);
+        }
+
+        /* ---- Card Sections ---- */
+        .card-header {
+            padding: 22px 50px 14px 22px;
+            /* right pad for star */
+            border-bottom: 1px solid var(--off-white);
+        }
+
+        .card-num {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.28;
+            color: var(--near-black);
+            margin-bottom: 12px;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-body);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .badge-time {
+            background: var(--off-white);
+            color: var(--dark-gray);
+            border: 1px solid var(--light-gray);
+        }
+
+        .badge-rev {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        .card-body {
+            padding: 16px 22px;
+            flex: 1;
+        }
+
+        .card-desc {
+            font-size: 13.5px;
+            line-height: 1.72;
+            color: var(--dark-gray);
+        }
+
+        .mv-block {
+            margin-top: 12px;
+            padding: 9px 12px;
+            background: var(--teal-light);
+            border-left: 2px solid var(--teal);
+            border-radius: 3px;
+            font-size: 12px;
+            line-height: 1.55;
+            color: var(--dark-gray);
+        }
+
+        .mv-block strong {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 2px;
+        }
+
+        .card-footer {
+            padding: 12px 22px 18px;
+            border-top: 1px solid var(--off-white);
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 2px;
+        }
+
+        .stat-val {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--near-black);
+            line-height: 1.3;
+        }
+
+        .stat-val.big {
+            font-family: var(--font-display);
+            font-size: 15px;
+            color: var(--black);
+        }
+
+        .likelihood-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding-top: 10px;
+            border-top: 1px solid var(--off-white);
+        }
+
+        .lik-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+        }
+
+        .lik-pill {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 2px;
+        }
+
+        .lik-vh {
+            background: var(--teal);
+            color: #fff;
+        }
+
+        .lik-h {
+            background: var(--teal-dark);
+            color: #fff;
+        }
+
+        .lik-mh {
+            background: #4a9090;
+            color: #fff;
+        }
+
+        .lik-m {
+            background: #999;
+            color: #fff;
+        }
+
+        .lik-timeline {
+            font-size: 10.5px;
+            color: var(--mid-gray);
+            font-style: italic;
+            margin-left: auto;
+        }
+
+        /* ============================================================
+       TOAST NOTIFICATION
+    ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 11px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 999;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast .t-star {
+            color: var(--teal);
+            margin-right: 6px;
+        }
+
+        /* ============================================================
+       FOOTER
+    ============================================================ */
+        .page-footer {
+            background: var(--black);
+            color: rgba(255, 255, 255, 0.35);
+            text-align: center;
+            padding: 28px 40px;
+            font-size: 10.5px;
+            letter-spacing: 0.18em;
+            font-family: var(--font-body);
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .page-footer strong {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 700;
+        }
+
+        /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+        @media (max-width: 720px) {
+            .topnav {
+                padding: 0 20px;
+            }
+
+            .cover {
+                padding: 52px 24px 44px;
+            }
+
+            .toolbar {
+                padding: 12px 20px;
+            }
+
+            .grid-wrapper {
+                padding: 32px 16px 60px;
+            }
+
+            .proposals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================================
+       MEGA SHOOT SECTION
+    ============================================================ */
+        .mega-shoot {
+            background: #040517;
+            border-bottom: 1px solid rgba(27, 117, 117, 0.2);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .mega-shoot-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 64px 48px 72px;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .mega-header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* LEFT — speed read panel */
+        .mega-left {
+            background: var(--teal);
+            padding: 44px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .mega-left::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .mega-tag {
+            font-family: var(--font-body);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 18px;
+        }
+
+        .mega-left-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.18;
+            margin-bottom: 24px;
+        }
+
+        .speed-read {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .sr-line {
+            font-family: var(--font-body);
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.82);
+            padding-left: 14px;
+            border-left: 2px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .sr-line strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .mega-left-badge {
+            margin-top: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            padding: 6px 14px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* RIGHT — full breakdown */
+        .mega-right {
+            padding: 44px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .mega-right-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .mega-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.25;
+        }
+
+        .mega-title span {
+            color: var(--teal);
+        }
+
+        .mega-pill {
+            flex-shrink: 0;
+            background: rgba(27, 117, 117, 0.2);
+            border: 1px solid rgba(27, 117, 117, 0.5);
+            color: var(--teal);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .mega-desc {
+            font-size: 13.5px;
+            line-height: 1.75;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 560px;
+        }
+
+        .mega-desc strong {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .mega-pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .pillar {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 14px 16px;
+        }
+
+        .pillar-icon {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .pillar-title {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .pillar-desc {
+            font-size: 11.5px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .mega-flow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .flow-node {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 0.04em;
+        }
+
+        .flow-node.primary {
+            background: rgba(27, 117, 117, 0.18);
+            border-color: rgba(27, 117, 117, 0.45);
+            color: #7ed8d8;
+        }
+
+        .flow-arrow {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+        }
+
+        .mega-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-top: 4px;
+        }
+
+        .mega-stat {
+            font-family: var(--font-display);
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .mega-stat strong {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 17px;
+        }
+
+        .summit-btn,
+        .offloader-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            /* Slightly tighter for better readability at larger size */
+            text-transform: uppercase;
+            border-radius: 4px;
+            padding: 24px 40px;
+            /* Reduced horizontal padding slightly */
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            margin: 0;
+            min-width: 360px;
+            /* Reduced to ensure it fits in 860px container */
+        }
+
+        .production-cta-row {
+            text-align: center;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            /* Changed to wrap to allow mobile stacking */
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media (max-width: 860px) {
+
+            .summit-btn,
+            .offloader-btn {
+                min-width: 100%;
+            }
+        }
+
+        .summit-btn {
+            color: #0c0b09;
+            background: linear-gradient(135deg, #f5d66e, #d4af37);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .offloader-btn {
+            color: #ffffff;
+            background: linear-gradient(135deg, #2d3e6d, #162447);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .summit-btn:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #fce8a6, #e5c158);
+            box-shadow: 0 15px 45px rgba(212, 175, 55, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.3em;
+        }
+
+        .offloader-btn:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #3d518c, #1f3161);
+            box-shadow: 0 15px 45px rgba(22, 36, 71, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.3em;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .summit-btn svg,
+        .offloader-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .summit-btn:hover svg,
+        .offloader-btn:hover svg {
+            transform: translateX(6px);
+        }
+
+        /* Hero tagline (below the cover-rule) */
+        .csr-tagline {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.58);
+            max-width: 580px;
+            margin: 6px auto 0;
+            font-style: italic;
+        }
+
+        /* Section label — document heading style */
+        .ms-section-label {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        /* Reason blocks — document style, vertical stack */
+        .ms-reasons {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .ms-reason {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .ms-reason:first-child {
+            padding-top: 0;
+        }
+
+        .ms-reason-num {
+            font-family: var(--font-body);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--teal);
+        }
+
+        .ms-reason-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ms-reason-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .ms-reason-sub {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.55);
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        .ms-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 4px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ms-bullets li {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.72);
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .ms-bullets li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .ms-para {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .ms-kicker {
+            font-size: 15px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+
+        /* Concerns block — inline, no tint */
+        .ms-concerns {
+            padding: 28px 0 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            background: none;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .ms-concerns-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 14px;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .ms-concerns-body {
+            font-size: 15px;
+            line-height: 1.75;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 10px;
+        }
+
+        .ms-concerns-body strong {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+        }
+
+        @media (max-width: 860px) {
+            .mega-shoot-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .mega-left {
+                padding: 32px 24px;
+            }
+
+            .mega-right {
+                padding: 32px 24px;
+            }
+
+            .mega-pillars {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .mega-pillars {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================================
+       SAVE STATE INDICATOR
+    ============================================================ */
+        .save-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4ade80;
+            display: inline-block;
+            margin-right: 5px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .save-dot.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+       STICKY NAV
+  ============================================================ -->
+    <nav class="topnav" role="navigation">
+        <span class="topnav-brand">Discterra</span>
+        <div class="topnav-actions">
+            <button class="nav-btn" id="btn-all" onclick="setView('all')">All Proposals</button>
+            <button class="nav-btn" id="btn-starred" onclick="setView('starred')">
+                <span class="star-icon">★</span>
+                Starred
+                <span class="starred-count" id="starred-count">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+       HERO
+  ============================================================ -->
+    <header class="cover">
+        <div class="cover-overlay"></div>
+        <div class="cover-content">
+            <div class="cover-eyebrow">Confidential · Martin Wirtschafter</div>
+            <h1 class="cover-title">
+                <span class="title-line1">15+ proposals</span>
+                <span class="title-line2">combined into a FLAGSHIP</span>
+                <span class="title-line2">MEGA SPEARHEAD</span>
+            </h1>
+            <p
+                style="font-family: var(--font-display); font-size: 20px; font-weight: 300; font-style: italic; color: rgba(255,255,255,0.7); margin-top: -10px; margin-bottom: 30px;">
+                "When everything runs through you, I show you how to step back."
+            </p>
+            <div class="cover-rule"></div>
+            <div class="cover-speed-read">
+                <div class="csr-lines">
+                    <span class="csr-line dim">The core move —</span>
+                    <span class="csr-line bright">A high-profile Founder Summit.</span>
+                    <span class="csr-line gap"></span>
+                    <span class="csr-line dim">Not a podcast.</span>
+                    <span class="csr-line dim">Not an interview.</span>
+                    <span class="csr-line gap"></span>
+                    <span class="csr-line bright">A flagship Founder Summit episode.</span>
+                    <span class="csr-line dim">Legacy. Insight. Cross-network collaboration.</span>
+                    <span class="csr-line accent">Next-generation inspiration.</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+       MEGA SHOOT SECTION
+  ============================================================ -->
+    <section class="mega-shoot" id="mega-shoot" aria-label="The Mega Shoot — Umbrella Strategy">
+        <div class="mega-shoot-inner">
+
+            <!-- Header row -->
+            <div class="mega-header-row">
+                <div class="mega-title">The Mega Spearhead — <span>A Flagship Founder Summit</span></div>
+                <div class="mega-pill">New Proposal</div>
+            </div>
+
+            <!-- Core concept -->
+            <p class="mega-desc">
+                A scaled-up content strategy featuring multiple existing, or current founders.<br>
+                <strong>Legacy. Insight.</strong> Most importantly — Cross-network collaboration. Next-generation
+                inspiration.
+            </p>
+            <p class="mega-desc" style="margin-top:-16px">
+                A one-day Founder Summit designed to cross-pollinate elite networks, capture generational insight, and
+                turn one filmed collaboration into a <strong>multi-platform distribution engine</strong>.
+            </p>
+
+            <!-- Why This Works -->
+            <div class="ms-section-label">Why This Works</div>
+            <div class="ms-reasons">
+
+                <div class="ms-reason">
+                    <div class="ms-reason-num">01</div>
+                    <div class="ms-reason-body">
+                        <div class="ms-reason-title">Cross-Pollination of Networks</div>
+                        <div class="ms-reason-sub">High-level exited founders. Recorded together once.</div>
+                        <ul class="ms-bullets">
+                            <li>Shared audiences</li>
+                            <li>Shared credibility</li>
+                            <li>Shared tagging power</li>
+                            <li>Algorithmic amplification</li>
+                        </ul>
+                        <p class="ms-kicker">You’re not borrowing attention. <strong>You’re multiplying it.</strong></p>
+                    </div>
+                </div>
+
+                <div class="ms-reason">
+                    <div class="ms-reason-num">02</div>
+                    <div class="ms-reason-body">
+                        <div class="ms-reason-title">Evergreen Asset (YouTube First)</div>
+                        <div class="ms-reason-sub">LinkedIn = 48-hour lifespan. YouTube = 5–10 year asset.</div>
+                        <p class="ms-para">Long-form on YouTube: Searchable. Discoverable. Compounds over time. Builds
+                            authority.</p>
+                        <p class="ms-para">Then: Turn insights into newsletter threads. Clip for TikTok. Cut for Reels.
+                            Extract quotes for LinkedIn.</p>
+                        <p class="ms-kicker"><strong>One day = months of strategic content.</strong></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Multi-Layer Monetisation -->
+            <div class="ms-section-label">The Real Power: Multi-Layer Monetisation</div>
+            <p class="mega-desc">A one-day Founder Summit designed to cross-pollinate elite networks, capture
+                generational insight, and turn one filmed collaboration into a multi-platform distribution engine.</p>
+            <p class="mega-desc" style="margin-top:-16px">You have multiple offers, for multiple opportunities, for
+                revenues — <strong>all under the same umbrella.</strong></p>
+
+            <!-- Distribution flow -->
+            <div class="mega-flow">
+                <div class="flow-node primary">🎬 Full-Day Shoot</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node primary">📺 YouTube (Master)</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node">💼 LinkedIn Clips</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node">📱 TikTok / Reels</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node">💰 Multi-Revenue</div>
+            </div>
+
+            <!-- If There Are Concerns -->
+            <div class="ms-concerns">
+                <div class="ms-concerns-title">If There Are Concerns</div>
+                <p class="ms-concerns-body">If NDAs or sensitivity are factors, or if the full summit format isn’t
+                    suitable — there is a structured list of alternative formats to explore.</p>
+                <p class="ms-concerns-body">However, <strong>one Mega Spearhead carries more strategic weight, more
+                        angles, and greater cross-network amplification</strong> than any smaller activities.</p>
+            </div>
+
+            <!-- Stats row -->
+            <div class="mega-cta-row">
+                <div class="mega-stat"><strong>15</strong> offers activated</div>
+                <div class="mega-stat" style="color:rgba(255,255,255,0.2)">·</div>
+                <div class="mega-stat"><strong>1</strong> day of Martin’s time</div>
+                <div class="mega-stat" style="color:rgba(255,255,255,0.2)">·</div>
+                <div class="mega-stat"><strong>£1M+</strong> potential unlocked</div>
+            </div>
+
+            <!-- Production Routes CTA -->
+            <div class="production-cta-row">
+                <a href="founder_summit.html" class="summit-btn">
+                    View the Founder Summit
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+                <a href="offer_offloader.html" class="offloader-btn">
+                    The Offer Offloader
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+       TOOLBAR
+  ============================================================ -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <span class="toolbar-label">Filter</span>
+            <button class="filter-btn active" data-filter="all" onclick="filterByTime('all', this)">All</button>
+            <button class="filter-btn" data-filter="zero" onclick="filterByTime('zero', this)">⚡ Zero time</button>
+            <button class="filter-btn" data-filter="onetime" onclick="filterByTime('onetime', this)">🟡
+                One-time</button>
+            <button class="filter-btn" data-filter="low" onclick="filterByTime('low', this)">🟠 Under 6h/mo</button>
+            <button class="filter-btn" data-filter="recurring" onclick="filterByTime('recurring', this)">🔴
+                Recurring</button>
+            <button class="filter-btn starred-filter" data-filter="starred" onclick="filterByTime('starred', this)">★
+                Starred only</button>
+        </div>
+        <div class="toolbar-right">
+            <span class="save-dot" id="save-dot"></span>
+            <span id="visible-count">15 proposals</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+       MAIN GRID
+  ============================================================ -->
+    <main class="grid-wrapper">
+        <div class="empty-state" id="empty-state">
+            <div class="empty-icon">★</div>
+            <div class="empty-title">No starred proposals yet</div>
+            <p class="empty-sub">Click the star on any proposal card to save your favourites here.</p>
+        </div>
+
+        <div class="proposals-grid" id="grid">
+
+            <!-- ── P1 ──────────────────────────────────────────── -->
+            <article class="card prio-a card-favored" id="card-p1" data-id="p1" data-time="zero">
+                <div class="card-accent"></div>
+                <div class="favored-badge">★ Favoured</div>
+                <button class="star-btn" id="star-p1" onclick="toggleStar('p1')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P1</div>
+                    <h2 class="card-title">The Phantom Pipeline</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">⚡ Zero time</span>
+                        <span class="badge badge-rev">£150k–£400k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">An identity-guarded TikTok channel reaching 7 and 8-figure internet founders
+                        who will never find Martin on LinkedIn. His name never appears. His schedule is never touched.
+                        Every pre-qualified lead that converts is revenue that didn't exist before this channel
+                        launched.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>3 retainer closes = £150,000+</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Per client</div>
+                            <div class="stat-val">£3,500 Intensive + £50k–£100k retainer</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">5 closes</div>
+                            <div class="stat-val big">£250k–£500k</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M3–6 leads · M6–9 first close</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P2 ──────────────────────────────────────────── -->
+            <article class="card prio-a" id="card-p2" data-id="p2" data-time="zero">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p2" onclick="toggleStar('p2')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P2</div>
+                    <h2 class="card-title">Full AI Reformulation &amp; Reposting Engine</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">⚡ One 2-hr session</span>
+                        <span class="badge badge-rev">£100k–£300k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">One afternoon for a professional photo session and voice model. After that,
+                        Martin's best ideas are reformulated daily into short-form video across TikTok, Reels, and
+                        YouTube Shorts — with zero further involvement. Content that disappears from LinkedIn in 24
+                        hours compounds across new platforms for years.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>2 closes from inbound covers all production
+                        costs and returns profit</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Mechanism</div>
+                            <div class="stat-val">100k views → 50 enquiries → 10 Intensives → 2–3 closes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">5 closes</div>
+                            <div class="stat-val big">£250k–£500k</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M2–4 viral reach · M5–8 first close</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P3 ──────────────────────────────────────────── -->
+            <article class="card prio-a" id="card-p3" data-id="p3" data-time="zero">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p3" onclick="toggleStar('p3')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P3</div>
+                    <h2 class="card-title">Operations App / Client CRM</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">⚡ One 1-hr brief</span>
+                        <span class="badge badge-rev">£120k–£300k ARR</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Discterra's 200+ company pipeline runs on memory and scattered DMs. One hour to
+                        describe the problem. You build the system. It saves Martin 130+ hours per year and has a direct
+                        licensing path to other exit advisors at £200–£500/month each.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>20 licences = £72,000/year — Martin cost: zero
+                        ongoing</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">50 licences</div>
+                            <div class="stat-val big">£180,000 / yr</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Martin's input</div>
+                            <div class="stat-val">Zero ongoing</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-vh">Very High</span>
+                        <span class="lik-timeline">M2–3 build · M4–6 licences</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P4 ──────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p4" data-id="p4" data-time="onetime">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p4" onclick="toggleStar('p4')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P4</div>
+                    <h2 class="card-title">The Whale Shot</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟡 One 90-min conversation</span>
+                        <span class="badge badge-rev">£100k–£400k</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">One strategically placed recorded conversation with the right person reaches
+                        500,000+ professionals in a single event. You identify the target, handle all production, and
+                        distribute everything. Martin shows up, talks to someone genuinely interesting, and leaves. The
+                        video compounds in the background for months.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>1 retainer close from the video = ROI achieved
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Reach</div>
+                            <div class="stat-val">500k professionals in one event</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">2 closes</div>
+                            <div class="stat-val big">£100k–£200k</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-mh">Medium–High</span>
+                        <span class="lik-timeline">M1–2 intro · M3 live · M4–6 closes</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P5 ──────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p5" data-id="p5" data-time="onetime">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p5" onclick="toggleStar('p5')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P5</div>
+                    <h2 class="card-title">The Live Room</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟡 90 min / month</span>
+                        <span class="badge badge-rev">£20k–£80k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">One structured live conversation per month with a guest from Martin's network.
+                        You source the guest, manage the tech, and turn 90 minutes into a full month of multi-channel
+                        content. The most natural proposal in the whole stack — and it builds visible social proof every
+                        single month.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>1 close per quarter = £200k/year for 6 hours of
+                        effort</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Model</div>
+                            <div class="stat-val">1k viewers × 12 months → 60 enquiries → 1–2 closes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Per close</div>
+                            <div class="stat-val big">£50k–£100k</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M1 launch · M3 first close</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P6 ──────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p6" data-id="p6" data-time="low">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p6" onclick="toggleStar('p6')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P6</div>
+                    <h2 class="card-title">Portfolio Multiplier (Media DD)</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟠 2 hrs per deal</span>
+                        <span class="badge badge-rev">£50k–£150k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">A professionally produced management documentary increases buyer confidence in
+                        a data room — and confidence translates directly into multiple. Martin adds a media layer to
+                        existing Discterra client work and charges a fractional percentage of the multiple uplift he was
+                        already generating.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>2 deals = £95,000 — barely moves the needle on
+                        his time</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Per deal</div>
+                            <div class="stat-val">£7,500 flat + 2% of uplift</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">3 deals / yr</div>
+                            <div class="stat-val big">£142,500</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-vh">Very High</span>
+                        <span class="lik-timeline">M2–3 first client opts in</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P7 ──────────────────────────────────────────── -->
+            <article class="card prio-b card-favored" id="card-p7" data-id="p7" data-time="low">
+                <div class="card-accent"></div>
+                <div class="favored-badge">★ Favoured</div>
+                <button class="star-btn" id="star-p7" onclick="toggleStar('p7')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P7</div>
+                    <h2 class="card-title">Skool Community ARR</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟠 2–3 hrs / month</span>
+                        <span class="badge badge-rev">£60k–£240k ARR</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Founders below the Discterra threshold are entirely unserved — and actively
+                        seeking the same guidance. A community at £150–£300/month captures this market, generates
+                        recurring revenue from day one, and functions as a self-funding feeder pipeline into Discterra
+                        advisory.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>30 members = covers all operating costs and
+                        returns profit</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">50 members</div>
+                            <div class="stat-val">£105,000 / yr</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">200 members</div>
+                            <div class="stat-val big">£420,000 ARR</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M2–3 launch · M6 at 100 members</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P8 ──────────────────────────────────────────── -->
+            <article class="card prio-c" id="card-p8" data-id="p8" data-time="recurring">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p8" onclick="toggleStar('p8')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P8</div>
+                    <h2 class="card-title">Authority Engine (YouTube)</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🔴 2 hrs / month</span>
+                        <span class="badge badge-rev">£200k–£500k long-term</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">A YouTube video from 2026 is still discoverable in 2029. LinkedIn posts
+                        disappear in 24 hours. Two hours a month builds a permanent, searchable Masterclass library. One
+                        warm YouTube-primed lead closes faster, at higher conviction, with lower price resistance than
+                        any cold lead ever will.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>3 closes/year covers full production cost and
+                        returns strong profit</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">5 closes</div>
+                            <div class="stat-val">£250k–£500k</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">10 closes</div>
+                            <div class="stat-val big">£500k–£1M</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M3–4 live · M6–9 first close · Compounds M12+</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P9 ──────────────────────────────────────────── -->
+            <article class="card prio-a" id="card-p9" data-id="p9" data-time="zero">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p9" onclick="toggleStar('p9')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P9</div>
+                    <h2 class="card-title">Exit Readiness Score</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">⚡ One 2-hr setup</span>
+                        <span class="badge badge-rev">£150k–£400k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">A branded diagnostic at £2,500–£5,000 per report telling founders exactly what
+                        their business is worth and what is killing their multiple. You run the system. Martin's name
+                        makes it the standard. Every buyer is a pre-qualified warm lead for Discterra advisory.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>10 reports in month one = £35,000 with zero
+                        Martin involvement</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">100 reports → 20 Intensives</div>
+                            <div class="stat-val">£350,000 + £200k–£600k pipeline</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-vh">Very High</span>
+                        <span class="lik-timeline">M2–3 built · M3–4 first sales</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P10 ─────────────────────────────────────────── -->
+            <article class="card prio-a" id="card-p10" data-id="p10" data-time="onetime">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p10" onclick="toggleStar('p10')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P10</div>
+                    <h2 class="card-title">Buyer Network Subscription</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟡 One intro round</span>
+                        <span class="badge badge-rev">£240k–£600k ARR</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">PE firms and family offices pay £2,000–£5,000/month for curated, pre-qualified
+                        acquisition targets from Discterra's live deal flow. Martin makes introductions to his existing
+                        PE contacts once. You manage everything after. Revenue starts from month one.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>5 subscribers = £150,000/year with near-zero
+                        ongoing time</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">5 firms</div>
+                            <div class="stat-val">£150,000 / yr</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">20 firms</div>
+                            <div class="stat-val big">£600,000 ARR</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-vh">Very High</span>
+                        <span class="lik-timeline">M1–2 intros · M3 subscriptions live</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P11 ─────────────────────────────────────────── -->
+            <article class="card prio-b card-favored" id="card-p11" data-id="p11" data-time="low">
+                <div class="card-accent"></div>
+                <div class="favored-badge">★ Favoured</div>
+                <button class="star-btn" id="star-p11" onclick="toggleStar('p11')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P11</div>
+                    <h2 class="card-title">Exit Accelerator Cohort</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟠 4 sessions per cohort</span>
+                        <span class="badge badge-rev">£300k–£800k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Ten founders. £20,000 per seat. Ninety days. Martin gives four group sessions —
+                        the same conversation he already has one-to-one — but earns £200,000 per cohort instead of a
+                        single Intensive fee. You run platform, curriculum, and community.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>5 founders at £15,000 each = £75,000 first
+                        cohort — proves the model</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">1 cohort</div>
+                            <div class="stat-val">£200,000</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">4 cohorts / yr</div>
+                            <div class="stat-val big">£800,000</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">£ / hr Martin</div>
+                            <div class="stat-val">£33,000</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M2–3 setup · M4 first cohort</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P12 ─────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p12" data-id="p12" data-time="onetime">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p12" onclick="toggleStar('p12')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P12</div>
+                    <h2 class="card-title">Buyer Method Licensing</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟡 One training day per firm</span>
+                        <span class="badge badge-rev">£100k–£300k ARR</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">M&amp;A boutiques and business brokers pay £10,000–£30,000/year to licence the
+                        BUYER Method as a differentiator in a commoditised market. Martin trains each firm once and
+                        never touches them again. Annual renewals are automatic — they paid for the credential, they
+                        keep paying to keep it.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>5 licences = £75,000 year one, recurring every
+                        year after</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">5 firms</div>
+                            <div class="stat-val">£75,000 ARR</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">15 firms</div>
+                            <div class="stat-val big">£225,000 ARR</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-mh">Medium–High</span>
+                        <span class="lik-timeline">M3–4 package · M5–6 first licences</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P13 ─────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p13" data-id="p13" data-time="onetime">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p13" onclick="toggleStar('p13')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P13</div>
+                    <h2 class="card-title">PE Operating Partner Placement</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟡 30 min per intro</span>
+                        <span class="badge badge-rev">£150k–£500k / yr</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">PE firms that acquire businesses need operators to run portfolio companies.
+                        Martin sits at the exact intersection of buy-side relationships and post-exit founder talent. A
+                        30-minute introduction call earns a £30,000–£80,000 finder's fee per successful placement.</p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>2 placements = £100,000 — found entirely within
+                        existing relationships</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">3 placements</div>
+                            <div class="stat-val">£150,000 / 1.5 hrs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">10 placements</div>
+                            <div class="stat-val big">£500,000 / 5 hrs</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-m">Medium</span>
+                        <span class="lik-timeline">M1–2 intros · M2–4 first close</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P14 ─────────────────────────────────────────── -->
+            <article class="card prio-a" id="card-p14" data-id="p14" data-time="zero">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p14" onclick="toggleStar('p14')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P14</div>
+                    <h2 class="card-title">M&amp;A Intelligence Newsletter</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">⚡ 40 min / month</span>
+                        <span class="badge badge-rev">£250k → £1M+ ARR</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">PE associates pay £200–£400/month for market intelligence they currently spend
+                        hours aggregating. Martin gives one 30-minute observation call per issue. You write, format, and
+                        deliver everything. At 300 subscribers this is a £1M ARR product built on 40 minutes a month.
+                    </p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>30 subscribers = £90,000/year — covers costs
+                        and returns strong margin</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">100 subscribers</div>
+                            <div class="stat-val">£300,000 / yr</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">300 subscribers</div>
+                            <div class="stat-val big">£1,080,000 ARR</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-h">High</span>
+                        <span class="lik-timeline">M1 setup · M2 first issue · M4–5 at 50 subs</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── P15 ─────────────────────────────────────────── -->
+            <article class="card prio-b" id="card-p15" data-id="p15" data-time="low">
+                <div class="card-accent"></div>
+                <button class="star-btn" id="star-p15" onclick="toggleStar('p15')" title="Star this proposal">★</button>
+                <div class="card-header">
+                    <div class="card-num">P15</div>
+                    <h2 class="card-title">The Deal Syndicate</h2>
+                    <div class="card-meta">
+                        <span class="badge badge-time">🟠 ~4 hrs per deal</span>
+                        <span class="badge badge-rev">£100k–£1M+ carry per exit</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">When a great acquisition target appears in Discterra's flow, a curated group of
+                        co-investors backs the deal. Martin evaluates it — the same work he is already doing — and earns
+                        15–20% carried interest on exit profits. The highest single-event ceiling in the entire stack.
+                    </p>
+                    <div class="mv-block"><strong>Minimum Viable</strong>1 completed deal pays more than most other
+                        proposals combined</div>
+                </div>
+                <div class="card-footer">
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Deal example</div>
+                            <div class="stat-val">Acquired £5M → Sold £8.4M → 20% carry</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Carry</div>
+                            <div class="stat-val big">£340,000 / deal</div>
+                        </div>
+                    </div>
+                    <div class="likelihood-row">
+                        <span class="lik-label">Likelihood</span>
+                        <span class="lik-pill lik-m">Medium</span>
+                        <span class="lik-timeline">M3–6 legal · M6–12 first deal · Exit 2–4 yrs</span>
+                    </div>
+                </div>
+            </article>
+
+        </div><!-- /proposals-grid -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+        <strong>Discterra</strong> &nbsp;·&nbsp; Proposal Snapshot Listing &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; 2025
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+    <!-- ============================================================
+       JAVASCRIPT — STAR SYSTEM + PERSISTENCE
+  ============================================================ -->
+    <script>
+        /* ──────────────────────────────────────────────────────────
+           STATE
+        ────────────────────────────────────────────────────────── */
+        const STORAGE_KEY = 'discterra_p0_stars';
+        let starred = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+        let currentTimeFilter = 'all';
+        let currentView = 'all';   // 'all' | 'starred'
+
+        /* ──────────────────────────────────────────────────────────
+           INIT
+        ────────────────────────────────────────────────────────── */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore saved stars
+            starred.forEach(id => applyStarUI(id, true));
+            updateCounter();
+            updateVisibleCount();
+            setView('all');
+        });
+
+        /* ──────────────────────────────────────────────────────────
+           STAR TOGGLE
+        ────────────────────────────────────────────────────────── */
+        function toggleStar(id) {
+            const isNowStarred = !starred.has(id);
+
+            if (isNowStarred) {
+                starred.add(id);
+            } else {
+                starred.delete(id);
+            }
+
+            applyStarUI(id, isNowStarred);
+            saveStars();
+            updateCounter();
+
+            // If we're in starred-only view and user unstarred a card, hide it
+            if (currentView === 'starred' || currentTimeFilter === 'starred') {
+                applyFilters();
+            }
+
+            showToast(isNowStarred, id);
+            flashSaveDot();
+        }
+
+        function applyStarUI(id, isStarred) {
+            const card = document.getElementById('card-' + id);
+            const btn = document.getElementById('star-' + id);
+            if (!card || !btn) return;
+
+            if (isStarred) {
+                btn.classList.add('starred');
+                card.classList.add('is-starred');
+                btn.setAttribute('title', 'Remove star');
+            } else {
+                btn.classList.remove('starred');
+                card.classList.remove('is-starred');
+                btn.setAttribute('title', 'Star this proposal');
+            }
+        }
+
+        /* ──────────────────────────────────────────────────────────
+           PERSIST
+        ────────────────────────────────────────────────────────── */
+        function saveStars() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
+        }
+
+        /* ──────────────────────────────────────────────────────────
+           VIEW TOGGLE (All / Starred nav buttons)
+        ────────────────────────────────────────────────────────── */
+        function setView(view) {
+            currentView = view;
+
+            document.getElementById('btn-all').classList.toggle('active', view === 'all');
+            document.getElementById('btn-starred').classList.toggle('active', view === 'starred');
+
+            if (view === 'starred') {
+                // Override time filter to show starred only
+                applyFiltersForStarredView();
+            } else {
+                applyFilters();
+            }
+        }
+
+        /* ──────────────────────────────────────────────────────────
+           FILTER BY TIME
+        ────────────────────────────────────────────────────────── */
+        function filterByTime(filter, btn) {
+            currentTimeFilter = filter;
+            currentView = 'all';
+
+            // Reset nav buttons
+            document.getElementById('btn-all').classList.remove('active');
+            document.getElementById('btn-starred').classList.remove('active');
+
+            // Update filter pill styles
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const cards = document.querySelectorAll('.card');
+            let visible = 0;
+
+            cards.forEach(card => {
+                const timeMatch = (currentTimeFilter === 'all') ||
+                    (currentTimeFilter === 'starred' ? starred.has(card.dataset.id) : card.dataset.time === currentTimeFilter);
+                const shown = timeMatch;
+
+                card.classList.toggle('hidden', !shown);
+                if (shown) visible++;
+            });
+
+            updateVisibleCount(visible);
+            checkEmptyState(visible);
+        }
+
+        function applyFiltersForStarredView() {
+            const cards = document.querySelectorAll('.card');
+            let visible = 0;
+
+            cards.forEach(card => {
+                const show = starred.has(card.dataset.id);
+                card.classList.toggle('hidden', !show);
+                if (show) visible++;
+            });
+
+            // Reset filter pills
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+
+            updateVisibleCount(visible);
+            checkEmptyState(visible);
+        }
+
+        /* ──────────────────────────────────────────────────────────
+           UI HELPERS
+        ────────────────────────────────────────────────────────── */
+        function updateCounter() {
+            const n = starred.size;
+            document.getElementById('starred-count').textContent = n;
+        }
+
+        function updateVisibleCount(n) {
+            if (n === undefined) {
+                n = document.querySelectorAll('.card:not(.hidden)').length;
+            }
+            document.getElementById('visible-count').textContent = n === 15
+                ? '15 proposals'
+                : `${n} of 15 proposals`;
+        }
+
+        function checkEmptyState(visible) {
+            const es = document.getElementById('empty-state');
+            es.classList.toggle('visible', visible === 0);
+        }
+
+        let toastTimer;
+        function showToast(isStarred, id) {
+            const num = id.replace('p', 'P');
+            const el = document.getElementById('toast');
+            el.innerHTML = isStarred
+                ? `<span class="t-star">★</span> ${num} starred`
+                : `${num} removed from starred`;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        let dotTimer;
+        function flashSaveDot() {
+            const dot = document.getElementById('save-dot');
+            dot.classList.add('visible');
+            clearTimeout(dotTimer);
+            dotTimer = setTimeout(() => dot.classList.remove('visible'), 2000);
+        }
+    </script>
+
+</body>
+
+</html>

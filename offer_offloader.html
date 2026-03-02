@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Offer Offloader — Discterra</title>
+    <meta name="description"
+        content="A low-profile, high-impact production solution. One discrete shoot. Immediate offer offloading and audience activation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --professional-blue: #162447;
+            --deep-blue: #1b1b2f;
+            --silver: #e0e0e0;
+            --silver-bright: #ffffff;
+            --black: #050505;
+            --white: #faf9f6;
+            --font-fancy: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 28px;
+            left: 32px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-fancy);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--silver);
+            text-decoration: none;
+            background: rgba(22, 36, 71, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            padding: 12px 20px;
+            backdrop-filter: blur(14px);
+            transition: all 0.4s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 48px;
+            background: linear-gradient(to bottom, var(--professional-blue), var(--black));
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-fancy);
+            font-size: 10px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-family: var(--font-fancy);
+            font-size: clamp(40px, 8vw, 90px);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--silver));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-sub {
+            font-size: clamp(18px, 2vw, 24px);
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            padding: 0;
+            margin-top: -60px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .gallery-item {
+            height: 500px;
+            overflow: hidden;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(0.8);
+            transition: all 0.8s ease;
+        }
+
+        .gallery-item:hover img {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 120px 48px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-fancy);
+            font-size: 32px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .feature h3 {
+            font-family: var(--font-fancy);
+            font-size: 18px;
+            color: var(--silver);
+            margin-bottom: 15px;
+        }
+
+        .feature p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+        }
+
+        .cta {
+            padding: 100px 48px;
+            text-align: center;
+            background: var(--professional-blue);
+        }
+
+        .btn-large {
+            display: inline-block;
+            padding: 24px 60px;
+            background: var(--white);
+            color: var(--black);
+            font-family: var(--font-fancy);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-large:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-btn">Return</a>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-eyebrow">Low Profile • High Impact</p>
+            <h1 class="hero-title">The Offer Offloader</h1>
+            <p class="hero-sub">The discreet, surgical production solution for busy founders. 1 focused shoot. Total
+                audience activation.</p>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <div class="gallery-item"><img src="img_offloader_1.png" alt="Discreet Set"></div>
+        <div class="gallery-item"><img src="img_offloader_2.png" alt="A-Roll Production"></div>
+        <div class="gallery-item"><img src="img_offloader_3.png" alt="Phantom Pipeline Op Center"></div>
+    </section>
+
+    <section class="content">
+        <h2 class="section-title">The Efficient Alternative</h2>
+        <div class="feature-grid">
+            <div class="feature">
+                <h3>One-on-One Sprint</h3>
+                <p>Minimal crew. Quiet location. No "summit" scale needed. We capture the A-Roll required to fuel your
+                    TikTok, YouTube, and LinkedIn funnels in a single, surgical window.</p>
+            </div>
+            <div class="feature">
+                <h3>The Phantom Pipeline</h3>
+                <p>We take the footage and do the heavy lifting. While your face is the front, our back-end "Phantom"
+                    systems handle the lead gen, offer offloading, and administrative overhead.</p>
+            </div>
+            <div class="feature">
+                <h3>Privacy Protected</h3>
+                <p>Ideal for founders who value discretion. We build your authority without exposing your entire network
+                    or operating at excessive scale before you're ready.</p>
+            </div>
+            <div class="feature">
+                <h3>Direct Distribution</h3>
+                <p>We don't just film; we deploy. Content is sliced for short-form retention and long-form searchable
+                    authority, ensuring every minute filmed generates revenue.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <a href="index.html" class="btn-large">Explore Proposals</a>
+    </section>
+
+</body>
+
+</html>
