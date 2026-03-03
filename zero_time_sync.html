@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Time Sink Solution — Discterra</title>
+    <meta name="description"
+        content="The ultimate leveraging protocol. 0 hours of founder time. Infinite scale. Powered by recursive AI workflows.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --chrome: #b0b0b0;
+            --chrome-bright: #ffffff;
+            --chrome-dark: #444444;
+            --black: #050505;
+            --deep-black: #000000;
+            --white: #faf9f6;
+            --font-fancy: 'Cinzel', serif;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ─── BACK BUTTON ─────────────────────────────────── */
+        .back-btn {
+            position: fixed;
+            top: 28px;
+            left: 32px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-fancy);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--chrome);
+            text-decoration: none;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            padding: 12px 20px;
+            backdrop-filter: blur(14px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .back-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .back-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ─── HERO ────────────────────────────────────────── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 48px 80px;
+            background: radial-gradient(circle at center, #111 0%, var(--black) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 900px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-fancy);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--chrome);
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-family: var(--font-fancy);
+            font-size: clamp(48px, 9vw, 110px);
+            font-weight: 400;
+            line-height: 0.9;
+            letter-spacing: 0.05em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .hero-title em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--chrome-bright) 0%, var(--chrome) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .hero-sub {
+            font-family: var(--font-serif);
+            font-size: clamp(20px, 2.5vw, 30px);
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 32px;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .h-stat-val {
+            font-family: var(--font-fancy);
+            font-size: 38px;
+            font-weight: 400;
+            color: var(--chrome-bright);
+            line-height: 1;
+        }
+
+        .h-stat-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 10px;
+        }
+
+        /* ─── GALLERY ────────────────────────────────────────── */
+        .gallery {
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            background: var(--black);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gallery-item {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.2) brightness(0.7);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .gallery-item:hover img {
+            filter: grayscale(0.5) contrast(1) brightness(1);
+            transform: scale(1.05);
+        }
+
+        /* ─── SECTION: CONCEPT ────────────────────────────── */
+        .concept {
+            padding: 140px 48px 100px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-label {
+            font-family: var(--font-fancy);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--chrome);
+            margin-bottom: 32px;
+        }
+
+        .concept-title {
+            font-family: var(--font-fancy);
+            font-size: clamp(34px, 4.8vw, 62px);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--white);
+            margin-bottom: 44px;
+            letter-spacing: 0.05em;
+        }
+
+        .concept-title em {
+            font-style: normal;
+            color: var(--chrome-bright);
+            display: block;
+            margin-top: 10px;
+        }
+
+        .concept-body {
+            font-family: var(--font-serif);
+            font-size: clamp(20px, 2.2vw, 26px);
+            font-weight: 300;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        /* ─── MATRIX / WORKFLOW ────────────────────────────── */
+        .matrix-section {
+            padding: 100px 48px;
+            background: var(--deep-black);
+            position: relative;
+        }
+
+        .matrix-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .workflow-visual {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 80px 40px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        .wf-node {
+            padding: 24px 40px;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: var(--font-fancy);
+            font-size: 12px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .wf-node.accent {
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            font-weight: 700;
+        }
+
+        .wf-arrow {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .wf-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .wf-sub-node {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ─── PILLARS ─────────────────────────────────────── */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .pillar {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 60px 50px;
+            transition: all 0.4s ease;
+        }
+
+        .pillar:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .pillar-title {
+            font-family: var(--font-fancy);
+            font-size: 20px;
+            margin-bottom: 24px;
+            letter-spacing: 0.1em;
+            color: var(--white);
+        }
+
+        .pillar-body {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ─── TRADEOFF ────────────────────────────────────── */
+        .tradeoff {
+            padding: 120px 48px;
+            background: var(--black);
+            text-align: center;
+        }
+
+        .tradeoff-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1200px;
+            margin: 60px auto 0;
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tradeoff-box {
+            background: var(--black);
+            padding: 60px;
+            text-align: left;
+        }
+
+        .tradeoff-box h4 {
+            font-family: var(--font-fancy);
+            font-size: 14px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: var(--chrome);
+        }
+
+        .tradeoff-list {
+            list-style: none;
+        }
+
+        .tradeoff-list li {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .tradeoff-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--chrome-dark);
+        }
+
+        /* ─── CTA ─────────────────────────────────────────── */
+        .cta-strip {
+            padding: 140px 48px;
+            text-align: center;
+            background: var(--deep-black);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-family: var(--font-fancy);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            border: none;
+            padding: 22px 60px;
+            border-radius: 2px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+        }
+
+        .cta-btn:hover {
+            background: var(--chrome);
+            transform: translateY(-4px);
+        }
+
+        /* ─── RESPONSIVE ──────────────────────────────────── */
+        @media (max-width: 1000px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .wf-grid,
+            .pillars-grid,
+            .tradeoff-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Return
+    </a>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-eyebrow">A Discterra Protocol</p>
+            <h1 class="hero-title">
+                Zero Time Sink
+                <em>Solution</em>
+            </h1>
+            <p class="hero-sub">The ultimate leverage matrix. 100% execution capacity. 0% founder involvement.</p>
+
+            <div class="hero-stats">
+                <div class="h-stat">
+                    <div class="h-stat-val">0h</div>
+                    <div class="h-stat-label">Ongoing Input</div>
+                </div>
+                <div class="h-stat">
+                    <div class="h-stat-val">100x</div>
+                    <div class="h-stat-label">Scale Factor</div>
+                </div>
+                <div class="h-stat">
+                    <div class="h-stat-val">∞</div>
+                    <div class="h-stat-label">Reach Potential</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="gallery">
+        <div class="gallery-item"><img src="img_ai_1.png" alt="AI Logic Cascade"></div>
+        <div class="gallery-item"><img src="img_ai_2.png" alt="Recursive Intelligence"></div>
+        <div class="gallery-item"><img src="img_ai_3.png" alt="High-Tech Infrastructure"></div>
+    </div>
+
+    <section class="concept">
+        <p class="section-label">Systemic Dominance</p>
+        <h2 class="concept-title">
+            Scaling Authority<br>
+            <em>At the Speed of Logic.</em>
+        </h2>
+        <p class="concept-body">
+            Using existing high-fidelity assets — like the <strong>Founder Summit</strong> footage or historical
+            recordings — we deploy a recursive AI engine to decompose, reformulate, and distribute your unique
+            positioning across every relevant market sector.
+        </p>
+        <p class="concept-body">
+            This isn't content creation. This is <strong>Authority Propagation</strong>. We move your ideas into the
+            hands of your target buyer while you focus exclusively on high-level strategy and high-value closes.
+        </p>
+    </section>
+
+    <section class="matrix-section">
+        <div class="matrix-inner">
+            <div class="workflow-visual">
+                <div class="wf-node">1. Raw Authority Data Pulse</div>
+                <div class="wf-arrow"></div>
+                <div class="wf-node">2. Semantic Intent Extraction</div>
+                <div class="wf-arrow"></div>
+                <div class="wf-grid">
+                    <div class="wf-sub-node">Vertical A: Exit Advising</div>
+                    <div class="wf-sub-node">Vertical B: Market Strategy</div>
+                    <div class="wf-sub-node">Vertical C: Leadership Ops</div>
+                </div>
+                <div class="wf-arrow"></div>
+                <div class="wf-node">3. Automated Distribution Workflows</div>
+                <div class="wf-arrow"></div>
+                <div class="wf-node accent">4. Passive Presence & Revenue</div>
+            </div>
+
+            <div class="pillars-grid">
+                <div class="pillar">
+                    <h3 class="pillar-title">Recursive Refinement</h3>
+                    <p class="pillar-body">The system learns which angles resonate with 8-figure founders and
+                        automatically tilts future distribution toward the highest-converting themes. Infinite
+                        optimization without a single meeting.</p>
+                </div>
+                <div class="pillar">
+                    <h3 class="pillar-title">Platform-Native Loops</h3>
+                    <p class="pillar-body">From LinkedIn thought leadership to TikTok authority clips, we adapt your
+                        voice perfectly to the medium, maintaining a 1:1 match with your high-status positioning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tradeoff">
+        <p class="section-label">The Strategy</p>
+        <h2 class="concept-title">Calculated <em>Trade-offs</em></h2>
+        <div class="tradeoff-grid">
+            <div class="tradeoff-box">
+                <h4>The Momentum</h4>
+                <ul class="tradeoff-list">
+                    <li>Zero drag on founder schedule</li>
+                    <li>Synchronous multi-offer testing</li>
+                    <li>24/7 global market penetration</li>
+                    <li>Hyper-leverage on filmed assets</li>
+                </ul>
+            </div>
+            <div class="tradeoff-box">
+                <h4>The Reality</h4>
+                <ul class="tradeoff-list">
+                    <li>Transition to industrial authority</li>
+                    <li>Focus on volume over 'artisan' feel</li>
+                    <li>Requires initial high-quality A-Roll</li>
+                    <li>Automated lead-gen integration</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-strip">
+        <h2 class="concept-title" style="margin-bottom: 50px;">Ready for <em>Autopilot?</em></h2>
+        <a href="index.html" class="cta-btn">Review All Strategic Proposals</a>
+    </section>
+
+</body>
+
+</html>

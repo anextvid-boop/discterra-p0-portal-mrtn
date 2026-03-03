@@ -515,6 +515,53 @@
             z-index: 2;
         }
 
+        /* ---- Black / AI Sync Card Theme ---- */
+        .card-black {
+            background: #0a0a0a !important;
+            border-color: #222 !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9) !important;
+        }
+
+        .card-black .card-accent {
+            background: linear-gradient(90deg, #111, #444, #777, #111) !important;
+            height: 4px;
+        }
+
+        .card-black .card-title {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .card-black .card-desc,
+        .card-black .stat-val,
+        .card-black .lik-timeline {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        .card-black .card-num,
+        .card-black .stat-label,
+        .card-black .lik-label {
+            color: #555 !important;
+        }
+
+        .card-black .badge-time {
+            background: #1a1a1a !important;
+            color: #999 !important;
+            border: 1px solid #333;
+        }
+
+        .card-black .badge-rev {
+            background: #222 !important;
+            color: #fff !important;
+            border: 1px solid #444;
+        }
+
+        .card-black .mv-block {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-left-color: #444 !important;
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
         /* ---- Star button ---- */
         .star-btn {
             position: absolute;
@@ -819,7 +866,7 @@
         }
 
         .mega-shoot-inner {
-            max-width: 860px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 64px 48px 72px;
             display: flex;
@@ -1047,43 +1094,49 @@
         }
 
         .summit-btn,
-        .offloader-btn {
+        .offloader-btn,
+        .ai-sync-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 16px;
             font-family: var(--font-display);
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 800;
-            letter-spacing: 0.22em;
-            /* Slightly tighter for better readability at larger size */
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             border-radius: 4px;
-            padding: 24px 32px;
+            padding: 30px 48px;
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             margin: 0;
             min-width: 320px;
-            /* Reduced further to guarantee side-by-side on 860px inner container */
+            text-align: center;
+            flex: 1;
         }
 
         .production-cta-row {
             text-align: center;
-            padding: 40px 0;
+            padding: 60px 0;
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
-            /* Changed to wrap to allow mobile stacking */
+            flex-wrap: nowrap;
+            /* Force side-by-side on larger screens */
             justify-content: center;
-            align-items: center;
-            gap: 20px;
+            align-items: stretch;
+            gap: 24px;
         }
 
-        @media (max-width: 860px) {
+        @media (max-width: 1080px) {
+            .production-cta-row {
+                flex-wrap: wrap;
+            }
 
             .summit-btn,
-            .offloader-btn {
+            .offloader-btn,
+            .ai-sync-btn {
                 min-width: 100%;
+                flex: none;
             }
         }
 
@@ -1099,6 +1152,13 @@
             background: linear-gradient(135deg, #2d3e6d, #162447);
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-sync-btn {
+            color: #ffffff;
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .summit-btn:hover {
@@ -1117,13 +1177,23 @@
         }
 
         .summit-btn svg,
-        .offloader-btn svg {
+        .offloader-btn svg,
+        .ai-sync-btn svg {
             transition: transform 0.3s ease;
         }
 
         .summit-btn:hover svg,
-        .offloader-btn:hover svg {
+        .offloader-btn:hover svg,
+        .ai-sync-btn:hover svg {
             transform: translateX(6px);
+        }
+
+        .ai-sync-btn:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #2a2a2a, #111111);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.28em;
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         /* Hero tagline (below the cover-rule) */
@@ -1474,6 +1544,14 @@
                         <polyline points="12 5 19 12 12 19" />
                     </svg>
                 </a>
+                <a href="zero_time_sync.html" class="ai-sync-btn">
+                    Zero Time Sink Solution
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
             </div>
 
         </div>
@@ -1554,22 +1632,22 @@
             </article>
 
             <!-- ── P2 ──────────────────────────────────────────── -->
-            <article class="card prio-a" id="card-p2" data-id="p2" data-time="zero">
+            <article class="card card-black prio-a" id="card-p2" data-id="p2" data-time="zero">
                 <div class="card-accent"></div>
                 <button class="star-btn" id="star-p2" onclick="toggleStar('p2')" title="Star this proposal">★</button>
                 <div class="card-header">
                     <div class="card-num">P2</div>
-                    <h2 class="card-title">Full AI Reformulation &amp; Reposting Engine</h2>
+                    <h2 class="card-title">Zero Time Sink Solution</h2>
                     <div class="card-meta">
                         <span class="badge badge-time">⚡ One 2-hr session</span>
                         <span class="badge badge-rev">£100k–£300k / yr</span>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="card-desc">One afternoon for a professional photo session and voice model. After that,
-                        Martin's best ideas are reformulated daily into short-form video across TikTok, Reels, and
-                        YouTube Shorts — with zero further involvement. Content that disappears from LinkedIn in 24
-                        hours compounds across new platforms for years.</p>
+                    <p class="card-desc">The ultimate leveraging protocol. We take High-Fidelity assets (Summit,
+                        historical recordings) and deploy recursive AI workflows to scale your authority across all
+                        native platforms. 0 hours of founder involvement required after the initial capture.
+                        Infinite reach, zero drag.</p>
                     <div class="mv-block"><strong>Minimum Viable</strong>2 closes from inbound covers all production
                         costs and returns profit</div>
                 </div>
