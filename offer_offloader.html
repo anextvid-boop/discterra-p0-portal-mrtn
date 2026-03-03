@@ -106,11 +106,30 @@
         }
 
         .hero-sub {
-            font-size: clamp(18px, 2vw, 24px);
+            font-size: clamp(16px, 1.8vw, 20px);
             color: rgba(255, 255, 255, 0.7);
             font-weight: 200;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-family: var(--font-fancy);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--silver);
+            text-transform: uppercase;
+        }
+
+        .hero-stats span {
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
         }
 
         .gallery {
@@ -144,9 +163,24 @@
         }
 
         .content {
-            padding: 120px 48px;
-            max-width: 1000px;
+            padding: 100px 48px;
+            max-width: 1100px;
             margin: 0 auto;
+        }
+
+        .section-intro {
+            text-align: center;
+            margin-bottom: 80px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-intro p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
         }
 
         .section-title {
@@ -166,16 +200,71 @@
 
         .feature h3 {
             font-family: var(--font-fancy);
-            font-size: 18px;
-            color: var(--silver);
-            margin-bottom: 15px;
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
         .feature p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.8;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
             font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .feature-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--professional-blue);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            background: rgba(22, 36, 71, 0.2);
+            padding: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+        }
+
+        .comparison-side h4 {
+            font-family: var(--font-fancy);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 30px;
+            color: var(--silver);
+        }
+
+        .outcome-banner {
+            text-align: center;
+            padding: 120px 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .outcome-banner h2 {
+            font-family: var(--font-fancy);
+            font-size: clamp(32px, 5vw, 48px);
+            line-height: 1.2;
+            margin-bottom: 40px;
         }
 
         .cta {
@@ -224,8 +313,14 @@
         <div class="hero-content">
             <p class="hero-eyebrow">Low Profile • High Impact</p>
             <h1 class="hero-title">The Offer Offloader</h1>
-            <p class="hero-sub">The discreet, surgical production solution for busy founders. 1 focused shoot. Total
-                audience activation.</p>
+            <p class="hero-sub">The discreet, surgical production solution for busy founders.
+                <br>New platforms. New traffic. New revenue. All from one focused session.
+            </p>
+            <div class="hero-stats">
+                <span>1 Session</span>
+                <span>Multiple Offers</span>
+                <span>Targeted Revenue</span>
+            </div>
         </div>
     </section>
 
@@ -239,32 +334,98 @@
     </section>
 
     <section class="content">
-        <h2 class="section-title">The Efficient Alternative</h2>
+        <div class="section-intro">
+            <h2 class="section-title">Built for Founders Who Value Control</h2>
+            <p>Not everyone wants to host a summit. Not everyone wants cameras everywhere. Not everyone wants scale
+                before structure. We work with operators who want precision over volume.</p>
+        </div>
+
         <div class="feature-grid">
             <div class="feature">
-                <h3>One-on-One Sprint</h3>
-                <p>Minimal crew. Quiet location. No "summit" scale needed. We capture the A-Roll required to fuel your
-                    TikTok, YouTube, and LinkedIn funnels in a single, surgical window.</p>
+                <h3>The Model</h3>
+                <p>1 Session. Multiple Offers. Multiple Platforms. One carefully structured production sprint becomes
+                    the foundation for:</p>
+                <ul class="feature-list">
+                    <li>Multiple offer angles</li>
+                    <li>Multiple content themes</li>
+                    <li>Multiple distribution channels</li>
+                    <li>Multiple revenue entry points</li>
+                </ul>
             </div>
+            <div class="feature">
+                <h3>Surgical Production</h3>
+                <p>A focused, quiet, high-efficiency production window. Designed for founders who value their time and
+                    discretion.</p>
+                <ul class="feature-list">
+                    <li>A-Roll Capture: Powerful direct-to-camera content</li>
+                    <li>Professional Interview: Narrative positioning</li>
+                    <li>Strategy Session: Recorded messaging refinement</li>
+                    <li>Premium Location: Discreet and focused</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-grid" style="margin-top: 100px;">
             <div class="feature">
                 <h3>The Phantom Pipeline</h3>
-                <p>We take the footage and do the heavy lifting. While your face is the front, our back-end "Phantom"
-                    systems handle the lead gen, offer offloading, and administrative overhead.</p>
+                <p>Your face is the front. Our systems run the back-end. After filming, we activate the "Phantom"
+                    infrastructure:</p>
+                <ul class="feature-list">
+                    <li>Content slicing for short-form retention</li>
+                    <li>Long-form authority builds for depth</li>
+                    <li>Platform-native formatting</li>
+                    <li>Offer alignment and direct CTAs</li>
+                    <li>Lead-gen infrastructure support</li>
+                </ul>
             </div>
             <div class="feature">
-                <h3>Privacy Protected</h3>
-                <p>Ideal for founders who value discretion. We build your authority without exposing your entire network
-                    or operating at excessive scale before you're ready.</p>
+                <h3>Direct Deployment</h3>
+                <p>We don't just film. We deploy. Your session is transformed into a suite of deployable authority
+                    assets.</p>
+                <ul class="feature-list">
+                    <li>Short-form clips for attention and reach</li>
+                    <li>Long-form YouTube authority pieces</li>
+                    <li>LinkedIn-native thought leadership</li>
+                    <li>Multi-platform repurposing</li>
+                    <li>Every minute structured to produce return</li>
+                </ul>
             </div>
-            <div class="feature">
-                <h3>Direct Distribution</h3>
-                <p>We don't just film; we deploy. Content is sliced for short-form retention and long-form searchable
-                    authority, ensuring every minute filmed generates revenue.</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-side">
+                <h4>Traditional Approach</h4>
+                <ul class="feature-list">
+                    <li>Monthly filming days</li>
+                    <li>Random content batches</li>
+                    <li>Endless editing cycles</li>
+                    <li>Massive disruptive events</li>
+                </ul>
+            </div>
+            <div class="comparison-side">
+                <h4>The Efficient Alternative</h4>
+                <ul class="feature-list">
+                    <li>One focused session</li>
+                    <li>Strategic capture</li>
+                    <li>Systematic deployment</li>
+                    <li>Authority without noise</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-grid" style="margin-top: 100px; text-align: center;">
+            <div class="feature" style="grid-column: span 2;">
+                <h3>Who This Is For</h3>
+                <p style="max-width: 700px; margin: 0 auto 30px;">This solution is engineered specifically for Founders
+                    scaling past word-of-mouth, Operators launching new offers, Experts building authority without
+                    overexposure, and CEOs who want leverage over vanity metrics.</p>
             </div>
         </div>
     </section>
 
-    <section class="cta">
+    <section class="outcome-banner">
+        <h2>Authority without noise.<br>Visibility without chaos.<br>Revenue without constant filming.</h2>
+        <p class="hero-eyebrow" style="margin-bottom: 60px;">Low Profile • High Impact</p>
         <a href="index.html" class="btn-large">Explore Proposals</a>
     </section>
 
