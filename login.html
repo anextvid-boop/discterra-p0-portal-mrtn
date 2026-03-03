@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discterra — Secure Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #050505;
+            color: #faf9f6;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            border-radius: 2px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .logo-mark {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.8em;
+            text-transform: uppercase;
+            color: #d4af37;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            letter-spacing: 0.1em;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 20px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 0.2em;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: #d4af37;
+            color: #050505;
+            border: none;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        button:hover {
+            background: #f5d66e;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 11px;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+
+        .error-msg.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <span class="logo-mark">Discterra</span>
+        <h1>Private Access</h1>
+        <form id="loginForm">
+            <input type="password" id="password" placeholder="ENTER ACCESS KEY" autocomplete="off">
+            <button type="submit">Unlock Portal</button>
+            <div id="error" class="error-msg">INVALID ACCESS KEY</div>
+        </form>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const pass = document.getElementById('password').value;
+            const success = window.attemptLogin(pass);
+            if (!success) {
+                const err = document.getElementById('error');
+                err.classList.add('visible');
+                setTimeout(() => err.classList.remove('visible'), 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
