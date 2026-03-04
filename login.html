@@ -11,6 +11,54 @@
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
         rel="stylesheet">
     <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #f1d279;
+            --black-pearl: #0b0b0b;
+            --deep-black: #050505;
+            --white: #faf9f6;
+            --font-fancy: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --gold-shimmer: rgba(212, 175, 55, 0.4);
+            --luxury-bg: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            --gold-glow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+            }
+
+            50% {
+                text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            }
+
+            100% {
+                text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+            }
+        }
+
+        /* --- Transitions --- */
+        body {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loading {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,9 +66,9 @@
         }
 
         body {
-            background: #050505;
-            color: #faf9f6;
-            font-family: 'Montserrat', sans-serif;
+            background: var(--deep-black);
+            color: var(--white);
+            font-family: var(--font-sans);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,101 +77,368 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(5, 5, 5, 0.7), rgba(5, 5, 5, 0.9)), url('luxury_office_background_1772569413272.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+        }
+
+        /* Glow Sphere */
+        .card-glow-sphere {
+            position: absolute;
+            width: 70vw;
+            height: 70vw;
+            max-width: 700px;
+            max-height: 700px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: slowSphereGlow 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes slowSphereGlow {
+            0% {
+                opacity: 0.5;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Moving light effect */
+        .ambient-light {
+            position: absolute;
+            width: 150vw;
+            height: 150vw;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            top: -25%;
+            left: -25%;
+            animation: moveLight 20s infinite linear;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes moveLight {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .login-card {
             width: 100%;
-            max-width: 400px;
-            padding: 60px 40px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(20px);
+            max-width: 480px;
+            aspect-ratio: 1 / 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            backdrop-filter: blur(40px) brightness(1.2);
+            -webkit-backdrop-filter: blur(40px) brightness(1.2);
             text-align: center;
             border-radius: 2px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            box-shadow:
+                0 50px 100px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(212, 175, 55, 0.05);
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: cardEntrance 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards, goldBoxShimmer 4s infinite alternate ease-in-out forwards;
+            animation-delay: 0s, 1.4s;
+        }
+
+        @keyframes goldBoxShimmer {
+            from {
+                box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(212, 175, 55, 0.05);
+                border-color: rgba(212, 175, 55, 0.25);
+            }
+
+            to {
+                box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(212, 175, 55, 0.15), 0 0 30px rgba(212, 175, 55, 0.25);
+                border-color: rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        /* Gold corner accents */
+        .login-card::before,
+        .login-card::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--gold);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .login-card::before {
+            top: 10px;
+            left: 10px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .login-card::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .logo-mark {
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-fancy);
             font-size: 10px;
-            letter-spacing: 0.8em;
+            letter-spacing: 1em;
             text-transform: uppercase;
-            color: #d4af37;
-            margin-bottom: 40px;
+            color: var(--gold);
+            margin-bottom: 24px;
             display: block;
+            opacity: 0.8;
+            animation: glowPulse 4s infinite ease-in-out;
+        }
+
+        /* --- Typo Animations --- */
+        @keyframes reveal {
+            from {
+                clip-path: inset(0 0 100% 0);
+                transform: translateY(30px) scale(0.98);
+                filter: blur(8px);
+            }
+
+            to {
+                clip-path: inset(0 0 0 0);
+                transform: translateY(0) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        .animate-reveal {
+            animation: reveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            display: inline-block;
         }
 
         h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 24px;
-            letter-spacing: 0.1em;
-            margin-bottom: 30px;
+            font-family: var(--font-fancy);
+            font-size: 32px;
+            letter-spacing: 0.15em;
+            margin-bottom: 50px;
             font-weight: 400;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(79, 172, 254, 0.3);
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        h1 span {
+            display: block;
+            opacity: 0;
+            transform-origin: center bottom;
+        }
+
+        h1 .line-1 {
+            animation-delay: 0.2s;
+            font-size: 1.25em;
+            color: var(--gold);
+            margin-bottom: 2px;
+        }
+
+        h1 .line-2 {
+            animation-delay: 0.4s;
+            font-size: 0.45em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInStagger {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .form-container {
+            width: 100%;
+            opacity: 0;
+            animation: fadeInStagger 0.8s ease forwards 0.9s;
         }
 
         input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 18px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 22px;
             color: #fff;
-            font-family: inherit;
-            font-size: 14px;
+            font-family: var(--font-sans);
+            font-size: 13px;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             text-align: center;
-            letter-spacing: 0.2em;
-            margin-bottom: 20px;
+            letter-spacing: 0.4em;
+            margin-bottom: 30px;
+            border-radius: 0;
         }
 
         input:focus {
-            border-color: #d4af37;
+            border-color: var(--gold);
             background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        input::placeholder {
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 11px;
         }
 
         button {
             width: 100%;
-            padding: 18px;
-            background: #d4af37;
-            color: #050505;
+            padding: 22px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-bright), var(--gold), var(--gold-bright), var(--gold));
+            background-size: 200% 100%;
+            color: var(--black-pearl);
             border: none;
-            font-family: 'Cinzel', serif;
-            font-size: 12px;
+            font-family: var(--font-fancy);
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
+            border-radius: 2px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+            animation: shimmer 5s infinite linear;
         }
 
         button:hover {
-            background: #f5d66e;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.45);
+            background-position: 100% 0;
+            animation-play-state: paused;
+        }
+
+        /* Radiant shimmer logic */
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        button:hover::after {
+            opacity: 0.4;
         }
 
         .error-msg {
             color: #ff4d4d;
-            font-size: 11px;
-            margin-top: 20px;
+            font-size: 10px;
+            margin-top: 30px;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            letter-spacing: 0.05em;
+            transition: all 0.4s ease;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
         .error-msg.visible {
             opacity: 1;
+            transform: translateY(0);
+        }
+
+        .flash-error {
+            animation: goldErrorPulse 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2 !important;
+        }
+
+        @keyframes goldErrorPulse {
+            0% {
+                border-color: rgba(212, 175, 55, 0.15);
+                box-shadow: none;
+                background: rgba(0, 0, 0, 0.4);
+            }
+
+            50% {
+                border-color: var(--gold);
+                box-shadow: 0 0 30px var(--gold), inset 0 0 20px var(--gold);
+                background: rgba(212, 175, 55, 0.1);
+            }
+
+            100% {
+                border-color: rgba(212, 175, 55, 0.15);
+                box-shadow: none;
+                background: rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .security-note {
+            margin-top: 40px;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.4;
+        }
+
+        /* Page Fade Out on Success */
+        body.fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
     </style>
 </head>
 
-<body>
+<body class="loading">
+    <div class="ambient-light"></div>
+    <div class="card-glow-sphere"></div>
     <div class="login-card">
-        <span class="logo-mark">Discterra</span>
-        <h1>Private Access</h1>
-        <form id="loginForm">
-            <input type="password" id="password" placeholder="ENTER ACCESS KEY" autocomplete="off">
-            <button type="submit">Unlock Portal</button>
-            <div id="error" class="error-msg">INVALID ACCESS KEY</div>
-        </form>
+        <span class="logo-mark animate-reveal">Secure Portal Access</span>
+        <h1>
+            <span class="line-1 animate-reveal">Discterra</span>
+            <span class="line-2 animate-reveal">Martin Wirtschafter</span>
+        </h1>
+        <div class="form-container">
+            <form id="loginForm">
+                <input type="password" id="password" placeholder="ENTER ACCESS KEY" autocomplete="off">
+                <button type="submit">Unlock Portal</button>
+                <div id="error" class="error-msg">INVALID ACCESS KEY</div>
+            </form>
+        </div>
+        <div class="security-note">Encrypted End-to-End Session</div>
     </div>
 
     <script src="auth.js"></script>
@@ -132,12 +447,43 @@
             e.preventDefault();
             const pass = document.getElementById('password').value;
             const success = window.attemptLogin(pass);
-            if (!success) {
+
+            if (success) {
+                // Trigger smooth fade out before redirect
+                document.body.classList.add('loading');
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 500);
+            } else {
                 const err = document.getElementById('error');
                 err.classList.add('visible');
+                // Shake the card on error
+                const card = document.querySelector('.login-card');
+                card.style.animation = 'none';
+                void card.offsetWidth; // trigger reflow
+                card.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both';
+
+                // Flash the password input gold
+                const formInput = document.getElementById('password');
+                formInput.classList.remove('flash-error');
+                void formInput.offsetWidth;
+                formInput.classList.add('flash-error');
+
                 setTimeout(() => err.classList.remove('visible'), 3000);
             }
         });
+
+        // CSS Shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                10%, 90% { transform: translate3d(-1px, 0, 0); }
+                20%, 80% { transform: translate3d(2px, 0, 0); }
+                30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+                40%, 60% { transform: translate3d(4px, 0, 0); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 

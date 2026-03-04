@@ -34,6 +34,17 @@
             --font-sans: 'Montserrat', sans-serif;
         }
 
+        /* --- Transitions --- */
+        body {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loading {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -465,14 +476,15 @@
     </style>
 </head>
 
-<body>
+<body class="loading">
 
     <a href="index.html" class="back-btn">
         <svg viewBox="0 0 24 24">
             <polyline points="15 18 9 12 15 6" />
         </svg>
-        Return
+        Back
     </a>
+    <button onclick="logout()" class="back-btn" style="left: auto; right: 32px;">Logout</button>
 
     <section class="hero">
         <div class="hero-content">

@@ -9,7 +9,6 @@ redirects = []
 [build]
 publish = "/Users/jahroinimo/Downloads/Martin Wirtschafter /the_proposal_listing/portal"
 publishOrigin = "default"
-base = "/Users/jahroinimo/Downloads/Martin Wirtschafter /the_proposal_listing/portal"
 
 [build.environment]
 

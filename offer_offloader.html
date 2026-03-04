@@ -33,6 +33,17 @@
             --font-sans: 'Montserrat', sans-serif;
         }
 
+        /* --- Transitions --- */
+        body {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loading {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         body {
             background: var(--black);
             color: var(--white);
@@ -306,9 +317,10 @@
     </style>
 </head>
 
-<body>
+<body class="loading">
 
-    <a href="index.html" class="back-btn">Return</a>
+    <a href="index.html" class="back-btn">Back</a>
+    <button onclick="logout()" class="back-btn" style="left: auto; right: 32px;">Logout</button>
 
     <section class="hero">
         <div class="hero-content">
